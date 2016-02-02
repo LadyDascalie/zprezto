@@ -3,11 +3,104 @@
 #
 # Authors:
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
 
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-# Customize to your needs...
+# Evaluate system PATH
+if [ -x /usr/libexec/path_helper ]; then
+  eval `/usr/libexec/path_helper -s`
+fi
+
+## GO
+export GOPATH=$HOME/Code/go
+PATH=$PATH:$GOPATH/bin:$PATH
+
+# NVM
+source $(brew --prefix nvm)/nvm.sh
+export NVM_DIR=~/.nvm
+
+# PHP
+export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
+
+## RBENV
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+
+# FZF
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+
+#### FUNCTIONS ####
+
+# Control ULVM from anywhere
+function ulvm() {
+cd ~/Code/ULVM/; vagrant "$1"; sleep 1; cd -;
+}
+
+# Add coloring to go tests
+function gotest() {
+  go test -v . | sed ''/PASS/s//$(printf "\033[32mPASS\033[0m")/'' | sed ''/FAIL/s//$(printf "\033[31mFAIL\033[0m")/''
+}
+
+# Copy escaped path to file (relies on fzf)
+function cpEscPath() {
+  echo $(printf %q "$(pwd)/$(fzf)") | pbcopy
+}
+
+# Copy regular path to file (relies on fzf)
+function cpRegPath() {
+  echo $(pwd)/$(fzf)| pbcopy
+}
+
+# Misc.
+test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
+
+
+#### ALIASES ####
+
+# MAMP Managed folders
+alias mamp="cd /Applications/MAMP/htdocs/"
+
+# Code folders
+alias code="cd $HOME/Code/"
+alias gob="cd $HOME/Code/go/bin/"
+alias gop="cd $HOME/Code/go/pkg/"
+alias gos="cd $HOME/Code/go/src/"
+alias golady="cd $HOME/Code/go/src/github.com/LadyDascalie"
+
+# git
+alias gst="git status"
+alias gaa="git add ." # use sparingly, that shit is dangerous
+alias gpo="git push -u origin"
+alias gch="git checkout"
+alias gpl="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit" # returns minimal git log with colors
+alias gcs="gc -sS" # Sign and Encrypt commit
+alias gb="git branch -vv" # Verbose branch information
+
+# utils
+alias octal="stat -f '%A %a %N'" # returns ocatal permissions for file/number
+alias resetdns="sudo killall -HUP mDNSResponder" # kill dns server
+alias ghost="sh $HOME/Code/go/src/github.com/LadyDascalie/GoHostMonitor/ghostMonitor.sh"
+alias youparse="$HOME/bin/youParse.py"
+alias odiff="git difftool -t opendiff -y" #then throw commit / file as usual
+alias h="homestead"
+alias h-reload="h halt && h up"
+alias showdots="defaults write com.apple.Finder AppleShowAllFiles YES && killall Finder"
+alias hidedots="defaults write com.apple.Finder AppleShowAllFiles NO && killall Finder"
+alias airplanemode="networksetup -switchtolocation AirplaneMode"
+alias automatic="networksetup -switchtolocation automatic"
+alias nohist="rm -rf $HOME/.zsh_history"
+
+# TYpos ;)
+alias cim="vim"
+alias nom="npm"
+alias isntall="install"
+
+# Fun aliases
+alias fuck="echo '(╯°□°）╯︵ ┻━┻'"
+
+# Convenience
+alias comix="open -a Simple\ Comic" # can take wildcards etc.
+
