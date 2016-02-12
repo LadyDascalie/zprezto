@@ -6,3 +6,51 @@
 #
 
 
+
+#### FUNCTIONS ####
+# Control ULVM from anywhere
+function ulvm() {
+cd ~/Code/ULVM/; vagrant "$1"; sleep 1; cd -;
+}
+
+# Add coloring to go tests
+function gotest() {
+  go test -v . | sed ''/PASS/s//$(printf "\033[32mPASS\033[0m")/'' | sed ''/FAIL/s//$(printf "\033[31mFAIL\033[0m")/''
+}
+
+# Copy escaped path to file (relies on fzf)
+function cpEscPath() {
+  echo $(printf %q "$(pwd)/$(fzf)") | pbcopy
+}
+
+# Copy regular path to file (relies on fzf)
+function cpRegPath() {
+  echo $(pwd)/$(fzf)| pbcopy
+}
+
+# Misc.
+test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
+
+#### ENVIRONEMENT ####
+# Evaluate system PATH
+if [ -x /usr/libexec/path_helper ]; then
+  eval `/usr/libexec/path_helper -s`
+fi
+
+## GO
+export GOPATH=/Users/iridium/Code/go
+PATH=$PATH:$GOPATH/bin:$PATH
+
+# NVM
+source $(brew --prefix nvm)/nvm.sh
+export NVM_DIR=~/.nvm
+
+# PHP
+export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
+export PATH="~/.composer/vendor/bin:$PATH"
+
+## RBENV
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+
+# FZF
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
