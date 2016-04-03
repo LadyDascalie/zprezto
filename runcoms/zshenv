@@ -38,7 +38,7 @@ if [ -x /usr/libexec/path_helper ]; then
 fi
 
 ## GO
-export GOPATH=/Users/iridium/Code/go
+export GOPATH=/Users/bencable/Code/go
 PATH=$PATH:$GOPATH/bin:$PATH
 
 # NVM
@@ -46,7 +46,6 @@ source $(brew --prefix nvm)/nvm.sh
 export NVM_DIR=~/.nvm
 
 # PHP
-export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
 export PATH="~/.composer/vendor/bin:$PATH"
 
 ## RBENV
